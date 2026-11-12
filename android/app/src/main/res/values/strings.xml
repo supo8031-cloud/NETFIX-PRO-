@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">NETFIX PRO</string>
-    <string name="title_activity_main">NETFIX PRO</string>
+    <string name="app_name">THU ZAW</string>
+    <string name="title_activity_main">THU ZAW</string>
     <string name="package_name">com.netfixpro.app</string>
     <string name="custom_url_scheme">com.netfixpro.app</string>
 </resources>
