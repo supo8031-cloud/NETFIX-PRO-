@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#080d18">
-<title>NETFIX PRO</title>
+<title>THU ZAW</title>
 <style>
 *{box-sizing:border-box}body{margin:0;background:#080d18;color:#fff;font-family:Arial,sans-serif;padding:18px}
 header{padding:16px 0}h1{color:#20e6a0;font-size:30px;margin:0}.sub{color:#8998ad}
@@ -19,7 +19,7 @@ footer{text-align:center;color:#65748a;margin-top:28px;font-size:11px}
 </style>
 </head>
 <body>
-<header><h1>NETFIX PRO</h1><p class="sub">Network Diagnosis & Repair Center</p></header>
+<header><h1>THU ZAW</h1><p class="sub">Personal Network Diagnosis & Repair</p></header>
 <div class="status"><strong id="status">CHECKING...</strong><p id="info" class="info">Checking your internet connection</p></div>
 <h2>Basic Diagnostics</h2>
 <div class="grid">
@@ -37,13 +37,13 @@ footer{text-align:center;color:#65748a;margin-top:28px;font-size:11px}
 <div class="card"><h3>📶 Wi-Fi Settings</h3><p>Open Android Wi-Fi settings</p><button class="secondary" onclick="wifiSettings()">OPEN SETTINGS</button></div>
 <div class="card"><h3>🧾 Test History</h3><p>View recent diagnostic results</p><button class="secondary" onclick="showHistory()">VIEW HISTORY</button></div>
 </div>
-<div id="result" aria-live="polite">NETFIX PRO READY. Select a test to begin.</div>
+<div id="result" aria-live="polite">THU ZAW READY. Select a test to begin.</div>
 <h2>Network Monitor</h2>
 <p class="info">Live device network status. This does not measure your router signal strength.</p>
 <div class="card"><div id="monitor" class="history">Waiting...</div><button class="secondary" style="margin-top:12px" onclick="update()">REFRESH STATUS</button></div>
 <h2>Network Scanner</h2>
 <div class="grid"><div class="card"><h3>📡 Wi-Fi Analyzer</h3><p>Nearby Wi-Fi names, signal and channel</p><button onclick="nativeWifiScan()">SCAN WI-FI</button></div><div class="card"><h3>🖥️ LAN Device Scanner</h3><p>Find responding devices on your connected Wi-Fi</p><button onclick="nativeLanScan()">SCAN MY LAN</button></div></div><p class="info">Wi-Fi scan requires Location permission and Android Location enabled. LAN scan checks only the local Wi-Fi subnet you are connected to. Some devices may not respond.</p>
-<footer>NETFIX PRO • Version 3.0</footer>
+<footer>THU ZAW • THU ZAW • Version 3.0</footer>
 <script>
 const result=document.getElementById('result');
 function show(message){result.textContent=message;saveHistory(message)}
