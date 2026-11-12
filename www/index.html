@@ -6,97 +6,60 @@
 <meta name="theme-color" content="#080d18">
 <title>NETFIX PRO</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#080d18;color:white;font-family:Arial;padding:20px}
-header{padding:20px 0}
-h1{color:#20e6a0;font-size:30px;margin:0}
-.sub{color:#8998ad}
-.status{background:#10251f;border:1px solid #176b4d;padding:18px;border-radius:15px;margin:20px 0}
-.status strong{color:#20e6a0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.card{background:#131e30;border:1px solid #263750;border-radius:15px;padding:18px;color:white}
-.card h3{font-size:15px;margin:10px 0}
-.card p{font-size:12px;color:#a5b3c6}
-button{background:#13c98b;color:#07130f;border:0;border-radius:9px;padding:12px;font-weight:bold;width:100%}
-#result{background:#131e30;padding:18px;border-radius:12px;margin-top:18px;white-space:pre-wrap;color:#20e6a0}
-footer{text-align:center;color:#65748a;margin-top:30px;font-size:12px}
+*{box-sizing:border-box}body{margin:0;background:#080d18;color:#fff;font-family:Arial,sans-serif;padding:18px}
+header{padding:16px 0}h1{color:#20e6a0;font-size:30px;margin:0}.sub{color:#8998ad}
+.status{background:#10251f;border:1px solid #176b4d;padding:16px;border-radius:15px;margin:18px 0}.status strong{color:#20e6a0}
+h2{font-size:17px;margin:22px 0 12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.card{background:#131e30;border:1px solid #263750;border-radius:14px;padding:14px;min-width:0}.card h3{font-size:14px;margin:2px 0 8px}.card p{font-size:12px;color:#a5b3c6;min-height:28px;margin:0 0 12px}
+button{background:#13c98b;color:#07130f;border:0;border-radius:9px;padding:11px 8px;font-weight:bold;width:100%;font-size:12px}
+.secondary{background:#263750;color:#fff}#result{background:#131e30;border:1px solid #263750;padding:16px;border-radius:12px;margin-top:16px;white-space:pre-wrap;overflow-wrap:anywhere;color:#20e6a0;min-height:70px;font-size:13px}
+.info{color:#9eacc0;font-size:12px;line-height:1.5}.history{font-size:12px;color:#b8c5d6;white-space:pre-wrap;overflow-wrap:anywhere}
+footer{text-align:center;color:#65748a;margin-top:28px;font-size:11px}
+@media(max-width:360px){body{padding:12px}.card{padding:11px}}
 </style>
 </head>
 <body>
-<header>
-<h1>NETFIX PRO</h1>
-<p class="sub">Network Diagnosis & Repair Center</p>
-</header>
-<div class="status">
-<strong id="status">CHECKING...</strong>
-<p id="info">Checking your internet connection</p>
-</div>
+<header><h1>NETFIX PRO</h1><p class="sub">Network Diagnosis & Repair Center</p></header>
+<div class="status"><strong id="status">CHECKING...</strong><p id="info" class="info">Checking your internet connection</p></div>
+<h2>Basic Diagnostics</h2>
 <div class="grid">
-<div class="card">
-<h3>📶 Internet Test</h3>
-<p>Check your connection</p>
-<button onclick="checkNet()">TEST NOW</button>
+<div class="card"><h3>📶 Internet Test</h3><p>Check internet reachability</p><button onclick="checkNet()">TEST NOW</button></div>
+<div class="card"><h3>⚡ Ping Test</h3><p>HTTP response-time estimate</p><button onclick="pingTest()">TEST NOW</button></div>
+<div class="card"><h3>🌐 DNS Test</h3><p>Resolve a domain using DNS-over-HTTPS</p><button onclick="dnsTest()">DNS CHECK</button></div>
+<div class="card"><h3>📡 IP Information</h3><p>View your public IP address</p><button onclick="ipTest()">CHECK IP</button></div>
 </div>
-<div class="card">
-<h3>⚡ Ping Test</h3>
-<p>Check response time</p>
-<button onclick="pingTest()">PING TEST</button>
+<h2>Advanced Diagnostics</h2>
+<div class="grid">
+<div class="card"><h3>🚀 Speed Test</h3><p>Estimate download speed (uses test data)</p><button onclick="speedTest()">START TEST</button></div>
+<div class="card"><h3>📊 Stability Test</h3><p>Repeated connection response check</p><button onclick="stabilityTest()">START TEST</button></div>
+<div class="card"><h3>🔐 Secure DNS Check</h3><p>Check Cloudflare DNS-over-HTTPS access</p><button onclick="secureDnsTest()">CHECK DNS</button></div>
+<div class="card"><h3>📱 Device Info</h3><p>Browser and connection information</p><button onclick="deviceInfo()">VIEW INFO</button></div>
+<div class="card"><h3>📶 Wi-Fi Settings</h3><p>Open Android Wi-Fi settings</p><button class="secondary" onclick="wifiSettings()">OPEN SETTINGS</button></div>
+<div class="card"><h3>🧾 Test History</h3><p>View recent diagnostic results</p><button class="secondary" onclick="showHistory()">VIEW HISTORY</button></div>
 </div>
-<div class="card">
-<h3>🌐 DNS Test</h3>
-<p>Check DNS connection</p>
-<button onclick="dnsTest()">DNS CHECK</button>
-</div>
-<div class="card">
-<h3>📡 IP Information</h3>
-<p>Network information</p>
-<button onclick="ipTest()">CHECK IP</button>
-</div>
-</div>
-<div id="result">NETFIX PRO READY...</div>
-<footer>NETFIX PRO • Version 1.0</footer>
+<div id="result" aria-live="polite">NETFIX PRO READY. Select a test to begin.</div>
+<h2>Network Monitor</h2>
+<p class="info">Live device network status. This does not measure your router signal strength.</p>
+<div class="card"><div id="monitor" class="history">Waiting...</div><button class="secondary" style="margin-top:12px" onclick="update()">REFRESH STATUS</button></div>
+<h2>Network Scanner</h2>
+<div class="card"><p class="info">LAN device discovery and Wi-Fi channel scanning require a dedicated native Android feature and permissions. This web version does not scan nearby devices or Wi-Fi channels.</p></div>
+<footer>NETFIX PRO • Version 2.0</footer>
 <script>
 const result=document.getElementById('result');
-async function checkNet(){
-result.textContent='Testing internet...';
-try{
-let t=Date.now();
-await fetch('https://www.google.com/generate_204',{mode:'no-cors',cache:'no-store'});
-result.textContent='Internet connection request completed. Latency: '+(Date.now()-t)+' ms';
-}catch(e){result.textContent='Internet connection failed. Check WiFi or Mobile Data.'}
-}
-async function pingTest(){
-result.textContent='Testing connection...';
-let t=Date.now();
-try{
-await fetch('https://www.cloudflare.com/cdn-cgi/trace',{mode:'no-cors',cache:'no-store'});
-result.textContent='Response time: '+(Date.now()-t)+' ms';
-}catch(e){result.textContent='Connection failed'}
-}
-async function dnsTest(){
-result.textContent='Testing DNS...';
-try{
-let r=await fetch('https://cloudflare-dns.com/dns-query?name=google.com&type=A',{headers:{accept:'application/dns-json'}});
-let d=await r.json();
-result.textContent='DNS STATUS: '+(d.Status===0?'SUCCESS':'FAILED')+'\nDomain: google.com';
-}catch(e){result.textContent='DNS test failed'}
-}
-async function ipTest(){
-result.textContent='Checking IP...';
-try{
-let r=await fetch('https://api.ipify.org?format=json');
-let d=await r.json();
-result.textContent='Public IP: '+d.ip;
-}catch(e){result.textContent='Unable to get IP address'}
-}
-function update(){
-let online=navigator.onLine;
-document.getElementById('status').textContent=online?'● DEVICE ONLINE':'● DEVICE OFFLINE';
-document.getElementById('info').textContent=online?'Network interface is connected':'Check WiFi or Mobile Data';
-}
-window.addEventListener('online',update);
-window.addEventListener('offline',update);
-update();
+function show(message){result.textContent=message;saveHistory(message)}
+function saveHistory(message){try{let h=JSON.parse(localStorage.getItem('netfix_history')||'[]');h.unshift(new Date().toLocaleString()+' — '+message);localStorage.setItem('netfix_history',JSON.stringify(h.slice(0,10)))}catch(e){}}
+async function timedFetch(url,options={}){let t=performance.now();let response=await fetch(url,{cache:'no-store',...options});return {response,ms:Math.round(performance.now()-t)}}
+async function checkNet(){result.textContent='Testing internet...';try{let x=await timedFetch('https://www.google.com/generate_204',{mode:'no-cors'});show('INTERNET REQUEST COMPLETED\nApprox. response time: '+x.ms+' ms\nNote: opaque browser response; reachability only.')}catch(e){show('INTERNET TEST FAILED\nCheck Wi-Fi or mobile data, then retry.')}}
+async function pingTest(){result.textContent='Testing response time...';try{let x=await timedFetch('https://www.cloudflare.com/cdn-cgi/trace');show('HTTP RESPONSE TIME: '+x.ms+' ms\nThis is an HTTP timing estimate, not ICMP ping.')}catch(e){show('Response test failed. Check your connection.')}}
+async function dnsTest(){result.textContent='Testing DNS...';try{let x=await timedFetch('https://cloudflare-dns.com/dns-query?name=google.com&type=A',{headers:{accept:'application/dns-json'}});let d=await x.response.json();show('DNS STATUS: '+(d.Status===0?'SUCCESS':'FAILED')+'\nDomain: google.com\nDNS-over-HTTPS response: '+x.ms+' ms')}catch(e){show('DNS test failed. DNS-over-HTTPS endpoint could not be reached.')}}
+async function ipTest(){result.textContent='Checking public IP...';try{let x=await timedFetch('https://api.ipify.org?format=json');let d=await x.response.json();show('PUBLIC IP: '+d.ip+'\nSource: ipify')}catch(e){show('Unable to retrieve public IP address.')}}
+async function speedTest(){result.textContent='Running download test...';try{let url='https://speed.cloudflare.com/__down?bytes=5000000';let start=performance.now();let r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error('HTTP '+r.status);let data=await r.arrayBuffer();let sec=(performance.now()-start)/1000;let mbps=(data.byteLength*8/sec/1000000).toFixed(2);show('ESTIMATED DOWNLOAD SPEED: '+mbps+' Mbps\nTest data: '+(data.byteLength/1000000).toFixed(2)+' MB\nTime: '+sec.toFixed(2)+' s\nResult may vary by server, data plan and network conditions.')}catch(e){show('Speed test could not complete. Please retry.')}} 
+async function stabilityTest(){result.textContent='Running 8 connection checks...';let times=[],fails=0;for(let i=0;i<8;i++){try{let x=await timedFetch('https://www.cloudflare.com/cdn-cgi/trace');times.push(x.ms)}catch(e){fails++}}if(!times.length){show('All 8 connection requests failed.');return}let avg=Math.round(times.reduce((a,b)=>a+b,0)/times.length),min=Math.min(...times),max=Math.max(...times);show('STABILITY CHECK\nSuccessful requests: '+times.length+'/8\nFailed requests: '+fails+'\nAverage HTTP response: '+avg+' ms\nFastest: '+min+' ms\nSlowest: '+max+' ms\nThis is not ICMP packet-loss or jitter measurement.')}
+async function secureDnsTest(){result.textContent='Checking secure DNS endpoint...';try{let x=await timedFetch('https://cloudflare-dns.com/dns-query?name=example.com&type=A',{headers:{accept:'application/dns-json'}});let d=await x.response.json();show('CLOUDFLARE DNS-OVER-HTTPS: '+(d.Status===0?'REACHABLE':'RESPONSE ERROR')+'\nResponse time: '+x.ms+' ms\nThis confirms endpoint access only; it does not prove all device DNS traffic is encrypted or leak-free.')}catch(e){show('Secure DNS endpoint could not be reached.')}}
+function deviceInfo(){let c=navigator.connection||navigator.mozConnection||navigator.webkitConnection;show('DEVICE / BROWSER INFO\nPlatform: '+(navigator.userAgentData?.platform||navigator.platform||'Not available')+'\nBrowser: '+navigator.userAgent+'\nOnline flag: '+(navigator.onLine?'Online':'Offline')+'\nConnection type: '+(c?.type||'Not available')+'\nEffective type: '+(c?.effectiveType||'Not available')+'\nDownlink estimate: '+(c?.downlink??'Not available')+' Mbps\nNote: device/browser may hide some fields.')}
+function wifiSettings(){show('Trying to open Android Wi-Fi settings...');try{window.location.href='intent:#Intent;action=android.settings.WIFI_SETTINGS;end'}catch(e){show('Open Android Settings > Wi-Fi manually.')}}
+function showHistory(){try{let h=JSON.parse(localStorage.getItem('netfix_history')||'[]');result.textContent=h.length?h.join('\n\n'):'No saved test history yet.'}catch(e){result.textContent='History is unavailable.'}}
+function update(){let online=navigator.onLine;document.getElementById('status').textContent=online?'● DEVICE ONLINE':'● DEVICE OFFLINE';document.getElementById('info').textContent=online?'Device reports an active network connection. Run a test to confirm internet access.':'Check Wi-Fi or mobile data.';document.getElementById('monitor').textContent='Status: '+(online?'Online':'Offline')+'\nLast refreshed: '+new Date().toLocaleTimeString()}
+window.addEventListener('online',update);window.addEventListener('offline',update);update();
 </script>
-</body>
-</html>
+</body></html>
