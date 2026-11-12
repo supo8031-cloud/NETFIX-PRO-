@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080d18">
+<title>NETFIX PRO</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d18;color:white;font-family:Arial;padding:20px}
+header{padding:20px 0}
+h1{color:#20e6a0;font-size:30px;margin:0}
+.sub{color:#8998ad}
+.status{background:#10251f;border:1px solid #176b4d;padding:18px;border-radius:15px;margin:20px 0}
+.status strong{color:#20e6a0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:#131e30;border:1px solid #263750;border-radius:15px;padding:18px;color:white}
+.card h3{font-size:15px;margin:10px 0}
+.card p{font-size:12px;color:#a5b3c6}
+button{background:#13c98b;color:#07130f;border:0;border-radius:9px;padding:12px;font-weight:bold;width:100%}
+#result{background:#131e30;padding:18px;border-radius:12px;margin-top:18px;white-space:pre-wrap;color:#20e6a0}
+footer{text-align:center;color:#65748a;margin-top:30px;font-size:12px}
+</style>
+</head>
+<body>
+<header>
+<h1>NETFIX PRO</h1>
+<p class="sub">Network Diagnosis & Repair Center</p>
+</header>
+<div class="status">
+<strong id="status">CHECKING...</strong>
+<p id="info">Checking your internet connection</p>
+</div>
+<div class="grid">
+<div class="card">
+<h3>📶 Internet Test</h3>
+<p>Check your connection</p>
+<button onclick="checkNet()">TEST NOW</button>
+</div>
+<div class="card">
+<h3>⚡ Ping Test</h3>
+<p>Check response time</p>
+<button onclick="pingTest()">PING TEST</button>
+</div>
+<div class="card">
+<h3>🌐 DNS Test</h3>
+<p>Check DNS connection</p>
+<button onclick="dnsTest()">DNS CHECK</button>
+</div>
+<div class="card">
+<h3>📡 IP Information</h3>
+<p>Network information</p>
+<button onclick="ipTest()">CHECK IP</button>
+</div>
+</div>
+<div id="result">NETFIX PRO READY...</div>
+<footer>NETFIX PRO • Version 1.0</footer>
+<script>
+const result=document.getElementById('result');
+async function checkNet(){
+result.textContent='Testing internet...';
+try{
+let t=Date.now();
+await fetch('https://www.google.com/generate_204',{mode:'no-cors',cache:'no-store'});
+result.textContent='Internet connection request completed. Latency: '+(Date.now()-t)+' ms';
+}catch(e){result.textContent='Internet connection failed. Check WiFi or Mobile Data.'}
+}
+async function pingTest(){
+result.textContent='Testing connection...';
+let t=Date.now();
+try{
+await fetch('https://www.cloudflare.com/cdn-cgi/trace',{mode:'no-cors',cache:'no-store'});
+result.textContent='Response time: '+(Date.now()-t)+' ms';
+}catch(e){result.textContent='Connection failed'}
+}
+async function dnsTest(){
+result.textContent='Testing DNS...';
+try{
+let r=await fetch('https://cloudflare-dns.com/dns-query?name=google.com&type=A',{headers:{accept:'application/dns-json'}});
+let d=await r.json();
+result.textContent='DNS STATUS: '+(d.Status===0?'SUCCESS':'FAILED')+'\nDomain: google.com';
+}catch(e){result.textContent='DNS test failed'}
+}
+async function ipTest(){
+result.textContent='Checking IP...';
+try{
+let r=await fetch('https://api.ipify.org?format=json');
+let d=await r.json();
+result.textContent='Public IP: '+d.ip;
+}catch(e){result.textContent='Unable to get IP address'}
+}
+function update(){
+let online=navigator.onLine;
+document.getElementById('status').textContent=online?'● DEVICE ONLINE':'● DEVICE OFFLINE';
+document.getElementById('info').textContent=online?'Network interface is connected':'Check WiFi or Mobile Data';
+}
+window.addEventListener('online',update);
+window.addEventListener('offline',update);
+update();
+</script>
+</body>
+</html>
