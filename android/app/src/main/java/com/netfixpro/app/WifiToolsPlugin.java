@@ -5,7 +5,7 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
-import android.net.wifi.DhcpInfo;
+import android.net.DhcpInfo;
 import android.os.Build;
 import android.location.LocationManager;
 import java.net.InetAddress;
