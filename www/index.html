@@ -42,8 +42,8 @@ footer{text-align:center;color:#65748a;margin-top:28px;font-size:11px}
 <p class="info">Live device network status. This does not measure your router signal strength.</p>
 <div class="card"><div id="monitor" class="history">Waiting...</div><button class="secondary" style="margin-top:12px" onclick="update()">REFRESH STATUS</button></div>
 <h2>Network Scanner</h2>
-<div class="card"><p class="info">LAN device discovery and Wi-Fi channel scanning require a dedicated native Android feature and permissions. This web version does not scan nearby devices or Wi-Fi channels.</p></div>
-<footer>NETFIX PRO • Version 2.0</footer>
+<div class="grid"><div class="card"><h3>📡 Wi-Fi Analyzer</h3><p>Nearby Wi-Fi names, signal and channel</p><button onclick="nativeWifiScan()">SCAN WI-FI</button></div><div class="card"><h3>🖥️ LAN Device Scanner</h3><p>Find responding devices on your connected Wi-Fi</p><button onclick="nativeLanScan()">SCAN MY LAN</button></div></div><p class="info">Wi-Fi scan requires Location permission and Android Location enabled. LAN scan checks only the local Wi-Fi subnet you are connected to. Some devices may not respond.</p>
+<footer>NETFIX PRO • Version 3.0</footer>
 <script>
 const result=document.getElementById('result');
 function show(message){result.textContent=message;saveHistory(message)}
@@ -59,6 +59,19 @@ async function secureDnsTest(){result.textContent='Checking secure DNS endpoint.
 function deviceInfo(){let c=navigator.connection||navigator.mozConnection||navigator.webkitConnection;show('DEVICE / BROWSER INFO\nPlatform: '+(navigator.userAgentData?.platform||navigator.platform||'Not available')+'\nBrowser: '+navigator.userAgent+'\nOnline flag: '+(navigator.onLine?'Online':'Offline')+'\nConnection type: '+(c?.type||'Not available')+'\nEffective type: '+(c?.effectiveType||'Not available')+'\nDownlink estimate: '+(c?.downlink??'Not available')+' Mbps\nNote: device/browser may hide some fields.')}
 function wifiSettings(){show('Trying to open Android Wi-Fi settings...');try{window.location.href='intent:#Intent;action=android.settings.WIFI_SETTINGS;end'}catch(e){show('Open Android Settings > Wi-Fi manually.')}}
 function showHistory(){try{let h=JSON.parse(localStorage.getItem('netfix_history')||'[]');result.textContent=h.length?h.join('\n\n'):'No saved test history yet.'}catch(e){result.textContent='History is unavailable.'}}
+async function nativeWifiScan(){
+ const api=window.Capacitor?.Plugins?.WifiTools;
+ if(!api){show('Native Wi-Fi scanner is not available in this build. Rebuild and reinstall the latest APK.');return}
+ result.textContent='Scanning nearby Wi-Fi networks...';
+ try{const r=await api.scanWifi();let lines=['WI-FI NETWORKS FOUND: '+r.count];(r.networks||[]).sort((a,b)=>b.signalDbm-a.signalDbm).forEach((n,i)=>lines.push((i+1)+'. '+n.ssid+' | '+n.signalDbm+' dBm | Ch '+n.channel+' | '+n.band+' | '+n.frequencyMHz+' MHz'));lines.push(r.note||'');show(lines.join('\\n'))}catch(e){show('WI-FI SCAN: '+(e.message||e))}
+}
+async function nativeLanScan(){
+ const api=window.Capacitor?.Plugins?.WifiTools;
+ if(!api){show('Native LAN scanner is not available in this build. Rebuild and reinstall the latest APK.');return}
+ if(!confirm('Scan only the local Wi-Fi network you are connected to for responding devices?'))return;
+ result.textContent='Scanning your local Wi-Fi network. This may take up to 18 seconds...';
+ try{const r=await api.scanLan();let lines=['LOCAL IP: '+r.localIp,'RESPONDING DEVICES: '+r.count];(r.devices||[]).forEach((d,i)=>lines.push((i+1)+'. '+d.ip+' | Open ports: '+(d.openPorts.length?d.openPorts.join(', '):'none detected')));lines.push(r.note||'');show(lines.join('\\n'))}catch(e){show('LAN SCAN: '+(e.message||e))}
+}
 function update(){let online=navigator.onLine;document.getElementById('status').textContent=online?'● DEVICE ONLINE':'● DEVICE OFFLINE';document.getElementById('info').textContent=online?'Device reports an active network connection. Run a test to confirm internet access.':'Check Wi-Fi or mobile data.';document.getElementById('monitor').textContent='Status: '+(online?'Online':'Offline')+'\nLast refreshed: '+new Date().toLocaleTimeString()}
 window.addEventListener('online',update);window.addEventListener('offline',update);update();
 </script>
