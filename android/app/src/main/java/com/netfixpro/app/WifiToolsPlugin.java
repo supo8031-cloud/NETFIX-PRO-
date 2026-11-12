@@ -143,7 +143,7 @@ public class WifiToolsPlugin extends Plugin {
                 if (alive) {
                     JSObject device = new JSObject();
                     device.put("ip", host);
-                    device.put("openPorts", new JSArray(open));
+                    JSArray portArray = new JSArray();\n                    for (Integer p : open) portArray.put(p);\n                    device.put("openPorts", portArray);
                     found.add(device);
                 }
             });
